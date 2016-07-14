@@ -78,9 +78,9 @@ describe('Map/reduce lab', () => {
   });
 
   describe("Showing off", function () {
-    it('should work with HTML', function () {
+    it('should add the appropriate amount of table rows to the HTML', function () {
       const $ = cheerio.load(document.body.innerHTML);
-      const $rows = $('#results tr');
+      const $rows = $('#results > tr');
       expect($rows.length).toEqual(nonAutomaticIssues.length);
     });
   });
