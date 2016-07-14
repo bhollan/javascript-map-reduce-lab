@@ -1,9 +1,12 @@
 const expect = require('expect');
 
 const fs = require('fs');
+const cheerio = require('cheerio');
 const jsdom = require('mocha-jsdom');
 const path = require('path');
 const babel = require('babel-core');
+
+const html = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf8');
 
 const babelResult = babel.transformFileSync(path.resolve(__dirname, '..', 'index.js'), {
   presets: ['es2015']
@@ -11,6 +14,7 @@ const babelResult = babel.transformFileSync(path.resolve(__dirname, '..', 'index
 
 describe('Map/reduce lab', () => {
   jsdom({
+    html,
     src: babelResult.code
   });
 
@@ -70,6 +74,14 @@ describe('Map/reduce lab', () => {
     it('should only contain issues that are not created automatically', function () {
       const hasPassed = nonAutomaticIssues.every(issue => !issue.body.includes('automatically created by learn.co'));
       expect(hasPassed).toBeTruthy('The `nonAutomaticIssues` array contains issues that were automatically created.');
+    });
+  });
+
+  describe("Showing off", function () {
+    it('should work with HTML', function () {
+      const $ = cheerio.load(document.body.innerHTML);
+      const $rows = $('#results tr');
+      expect($rows.length).toEqual(nonAutomaticIssues.length);
     });
   });
 });
